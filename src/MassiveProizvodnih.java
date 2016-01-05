@@ -13,7 +13,7 @@ public class MassiveProizvodnih {
 
         int x=0;
 
-        double[] outMassive = new double[inputMassive.length-period+1];
+        double[] outMassive = new double[inputMassive.length-period];
 
         for(int i=0;i<outMassive.length;i++) {
             for(int k=0;k<period;k++)
@@ -31,5 +31,13 @@ public class MassiveProizvodnih {
         }
         return b;
     };
+
+    public static void consolOutMassive(final double[] array) {
+        for(int i=0;i<array.length;i++) {
+            System.out.print("(" + i +")" + array[i]+" ");
+        }
+        System.out.println();
+
+    }
 
 }
