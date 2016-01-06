@@ -1,3 +1,5 @@
+import model.StringFile;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -5,7 +7,7 @@ import java.util.Scanner;
 
 public class InputFile {
 
-    public static double[] inputMassiveDouble(String fileNames) throws IOException {
+    public static StringFile[] inputMassiveRecord(String fileNames) throws IOException {
 
         // открываем файл
         BufferedReader reader = new BufferedReader(new FileReader(fileNames));
@@ -19,13 +21,43 @@ public class InputFile {
         }
         reader.close();
 
-        reader = new BufferedReader(new FileReader("C:\\AUDUSD240.csv"));
-        scanner=null;
-
-        double[] mas1 = new double[index];
+        StringFile[] masRec = new StringFile[index];
+        for(int i=0;i<masRec.length;i++)
+            masRec[i] = new StringFile();
 
         index=0;
+        reader = new BufferedReader(new FileReader(fileNames));
+        while ((line = reader.readLine()) != null)
+        {
+            int index2=0;
+            scanner = new Scanner(line);
+            scanner.useDelimiter(",");
+            while (scanner.hasNext()) {
+                String data = scanner.next();
+                if (index2 == 0)
+                    masRec[index].setDate(data);
+                else if (index2 == 1)
+                    masRec[index].setTime(data);
+                else if (index2 == 2)
+                    masRec[index].setOpen(new Double(data));
+                else if (index2 == 3)
+                    masRec[index].setMax(new Double(data));
+                else if (index2 == 4)
+                    masRec[index].setMin(new Double(data));
+                else if (index2 == 5)
+                    masRec[index].setClose(new Double(data));
+                else if (index2 == 6)
+                    masRec[index].setAmount(new Integer(data));
+                else
+                    System.out.println("Некорректные данные::" + data);
+                index2++;
+            }
+            index2=0;
+
+            index++;
+        }
         reader.close();
-        return mas1;
+
+        return masRec;
     }
 }
