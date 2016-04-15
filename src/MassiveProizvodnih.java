@@ -19,8 +19,9 @@ public class MassiveProizvodnih {
         List<Double> outMassive = new ArrayList<>();
 
         for(int i=0;i<inputMassive.size()-inMasSravnenii.size();i++) {
+            outMassive.add(0D);
             for(int k=0;k<inMasSravnenii.size();k++)
-                outMassive.add(Math.abs(inputMassive.get(i+k)-inMasSravnenii.get(k)));
+                outMassive.set(i,outMassive.get(i)+Math.abs(inputMassive.get(i+k)-inMasSravnenii.get(k)));
         }
 
         x=foundMinValue(outMassive);
