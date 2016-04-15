@@ -1,35 +1,39 @@
+import java.util.ArrayList;
+import java.util.List;
+
 public class Main {
 
     public static void main(String[] args) {
 
         int period = 3;
 
+        final int LengthMassive = 100;
+
+        //Случайный массив
+        List<Double> masFloat = new ArrayList<>();
+        for(int i=0; i<LengthMassive;i++) {
+            masFloat.add(Math.random()*10);
+        }
+        List<Double> outFloat = MassiveProizvodnih.proizvodnie(masFloat);
         //inputMassiveProverki
-        double[] masFloat = new double[20];
-        for(int i=0; i<masFloat.length;i++) {
-            masFloat[i]=Math.random()*10;
+        List<Double> masSravnenii = new ArrayList<>();
+
+        for(int i=0; i<period+1;i++) {
+            masSravnenii.add(Math.random()*10);
         }
 
-        double[] outFloat = MassiveProizvodnih.proizvodnie(masFloat);
+        List<Double> MasProizvodnihSravnenii = MassiveProizvodnih.proizvodnie(masSravnenii) ;
 
-        //inputMassiveProverki
-        double[] masSravnenii = new double[period+1];
-        for(int i=0; i<masSravnenii.length;i++) {
-            masFloat[i]=Math.random()*10;
-        }
+        int index = MassiveProizvodnih.poziciaShodstva(outFloat,MasProizvodnihSravnenii);
 
-        double[] MasProizvodnihSravnenii = MassiveProizvodnih.proizvodnie(masSravnenii) ;
-
-        int index = MassiveProizvodnih.poziciaShodstva(outFloat,MasProizvodnihSravnenii, period);
-
-        System.out.println(masFloat[MassiveProizvodnih.foundMinValue(masFloat)]);
+        System.out.println(masFloat.get(MassiveProizvodnih.foundMinValue(masFloat)));
 
         System.out.println("Blizhaishee shodstvo "+ index);
 
-        for (int i=index; i<index+period; i++) {
-
-            System.out.println(outFloat[i]);
-        }
+//
+//        for (int i=index; i<index+period; i++) {
+//            System.out.println(outFloat.get(i));
+//        }
 
         System.out.println();
 
