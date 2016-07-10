@@ -1,3 +1,5 @@
+package com.cutterfire;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,11 +31,6 @@ public class Main {
         System.out.println(masFloat.get(MassiveProizvodnih.foundMinValue(masFloat)));
 
         System.out.println("Blizhaishee shodstvo "+ index);
-
-//
-//        for (int i=index; i<index+period; i++) {
-//            System.out.println(outFloat.get(i));
-//        }
 
         System.out.println();
 

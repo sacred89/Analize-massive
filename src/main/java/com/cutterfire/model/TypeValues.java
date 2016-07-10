@@ -1,4 +1,4 @@
-package model;
+package com.cutterfire.model;
 
 /**
  * Created by Егор on 13.06.2016.
