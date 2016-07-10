@@ -1,17 +1,13 @@
 package com.cutterfire.view;
 
 import com.cutterfire.GlobalVariable;
-import com.cutterfire.model.LogicScheme;
-import com.cutterfire.model.TimeSeries;
-import com.cutterfire.model.TypeValues;
+import com.cutterfire.model.*;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
 
 import java.io.FileNotFoundException;
@@ -33,6 +29,10 @@ public class View extends Application {
         clearButton.setTranslateX(350);
         clearButton.setTranslateY(10);
 
+        Button analiZeButton = new Button("AnaliZe");
+        analiZeButton.setTranslateX(450);
+        analiZeButton.setTranslateY(10);
+
         NumberAxis xAxis = new NumberAxis();
         NumberAxis yAxis = new NumberAxis();
         xAxis.setLabel("date");
@@ -42,7 +42,6 @@ public class View extends Application {
 
         loadButton.setOnAction(event-> {
             try {
-                if (mainLineChart.getData().isEmpty()) {
                     System.out.println("Loading...");
                     LogicScheme logicScheme = new LogicScheme();
                     logicScheme.appendColumn("date", TypeValues.DATE);
@@ -53,14 +52,7 @@ public class View extends Application {
                     logicScheme.appendColumn("count",TypeValues.INT);
                     ts = new TimeSeries(textField.getText(),logicScheme);
                     mainLineChart.getData().addAll(ts.getChart());
-                }
-                else {
-                    XYChart.Series seriesChart = new XYChart.Series();
-                    seriesChart.getData().add((new XYChart.Data(0L,ts.getMean(2))));
-                    seriesChart.getData().add((new XYChart.Data(ts.getRange(0),ts.getMean(2))));
-                    seriesChart.setName("dasd");
-                    mainLineChart.getData().addAll(seriesChart);
-                }
+
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
                 textField.setText("Введён не корректный путь");
@@ -70,9 +62,21 @@ public class View extends Application {
 
         });
 
+        analiZeButton.setOnAction(event1 -> {
+            FourierSeries fourierSeries = ts.getFourier(2);
+            System.out.println(fourierSeries);
+            XYChart.Series seriesChart = new XYChart.Series();
+            for (Row row :ts.getSeries()) {
+                Double x = (Double) row.getRow()[0];
+                Double y = fourierSeries.transform(x);
+                seriesChart.getData().add((new XYChart.Data(x,y)));
+            }
+            mainLineChart.getData().addAll(seriesChart);
+        });
+
         clearButton.setOnAction(event ->mainLineChart.getData().clear());
 
-        Group root = new Group(textField,loadButton,clearButton,mainLineChart);
+        Group root = new Group(textField,loadButton,clearButton,mainLineChart,analiZeButton);
         Scene scene = new Scene(root, GlobalVariable.WEIGHT, GlobalVariable.HEIGHT);
 
         Stage stage = new Stage();

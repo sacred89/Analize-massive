@@ -5,13 +5,19 @@ import javafx.scene.chart.XYChart;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class TimeSeries {
     List<Row> series;
     final LogicScheme logicScheme;
+    public long n =0;
+    public final long k =10;
+    long range = 0;
 
     public TimeSeries(String fileName,final LogicScheme logicScheme) throws FileNotFoundException {
         // открываем файл
@@ -35,6 +41,7 @@ public class TimeSeries {
                     }
                 })
                 .collect(Collectors.toList());
+        range = getRange(0);
     }
 
     public List<Row> getSeries() {
@@ -66,8 +73,28 @@ public class TimeSeries {
                     max = (Long) row.getRow()[numberColumn];
             }
         }
-
         return max-min;
+    }
+
+    public FourierSeries getFourier(int numberColumn) {
+        Double intercept = getMean(numberColumn);
+
+        List<Double> cosCoeff = new ArrayList<>();
+        List<Double> sinCoeff = new ArrayList<>();
+
+        for (int i=1; i<k;i++) {
+            Double summA = 0D;
+            Double summB = 0D;
+
+            for (Row row : series) {
+                summA +=((Double) row.getRow()[numberColumn])*Math.cos((double) i*(Double) row.getRow()[0]);
+                summB +=((Double) row.getRow()[numberColumn])*Math.sin((double) i*(Double)row.getRow()[0]);
+            }
+
+            cosCoeff.add(summA/n*2);
+            sinCoeff.add(summB/n*2);
+        }
+        return new FourierSeries(sinCoeff,cosCoeff,intercept);
     }
 
     public Double getMean(int numberColumn) {
@@ -86,7 +113,7 @@ public class TimeSeries {
             }
             n++;
         }
-
+        this.n=n;
         return summ/(double)n;
     }
 
@@ -109,11 +136,13 @@ public class TimeSeries {
             }
         }
 
+        Double koefficient = range/Math.PI/2;
+
         for (Row row : series){
             switch (logicScheme.getTypeValues(numberColumn)) {
                 case DOUBLE: row.getRow()[numberColumn] = (Double) row.getRow()[numberColumn]-(Double) min;
                     break;
-                case DATE: row.getRow()[numberColumn] = (Long) row.getRow()[numberColumn]-(Long)min;
+                case DATE: row.getRow()[numberColumn] =(((Long) row.getRow()[numberColumn]-(Long)min)/koefficient)-Math.PI;
                     break;
             }
         }
