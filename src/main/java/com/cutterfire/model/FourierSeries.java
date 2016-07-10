@@ -47,10 +47,16 @@ public class FourierSeries {
 
     @Override
     public String toString() {
-        return "FourierSeries{" +
-                "sinCoeff=" + sinCoeff +
-                ", cosCoeff=" + cosCoeff +
-                ", intecept=" + intecept +
-                '}';
+
+        StringBuffer sb = new StringBuffer("Function = "+ intecept+ "+");
+        for (int i=0;i<cosCoeff.size();i++) {
+            sb.append(String.format("%(.5f * cos(", cosCoeff.get(i)) + "x*" + (i+1)+")+");
+            sb.append(String.format("%(.5f * sin(", sinCoeff.get(i)) + "x*" + (i+1)+")+");
+            sb.append("\n");
+        }
+        System.out.println(cosCoeff.size());
+        System.out.println(sinCoeff.size());
+        return sb.substring(0,sb.length()-1);
+
     }
 }

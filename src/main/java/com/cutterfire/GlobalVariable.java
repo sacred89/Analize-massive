@@ -5,6 +5,6 @@ package com.cutterfire;
  */
 public class GlobalVariable {
     public static int WEIGHT = 800;
-    public static int HEIGHT = 600;
+    public static int HEIGHT = 700;
 
 }

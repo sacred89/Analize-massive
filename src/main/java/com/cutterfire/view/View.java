@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
 
 import java.io.FileNotFoundException;
@@ -40,6 +41,13 @@ public class View extends Application {
         MainLineChart mainLineChart = new MainLineChart(xAxis,yAxis);
         mainLineChart.setTitle(textField.getText());
 
+        TextArea textArea = new TextArea();
+        textArea.setTranslateX(10);
+        textArea.setTranslateY(610);
+        textArea.setPrefHeight(130);
+        textArea.setPrefWidth(780);
+        textArea.setScrollLeft(0.5);
+
         loadButton.setOnAction(event-> {
             try {
                     System.out.println("Loading...");
@@ -64,7 +72,7 @@ public class View extends Application {
 
         analiZeButton.setOnAction(event1 -> {
             FourierSeries fourierSeries = ts.getFourier(2);
-            System.out.println(fourierSeries);
+            textArea.setText(fourierSeries.toString());
             XYChart.Series seriesChart = new XYChart.Series();
             for (Row row :ts.getSeries()) {
                 Double x = (Double) row.getRow()[0];
@@ -76,23 +84,13 @@ public class View extends Application {
 
         clearButton.setOnAction(event ->mainLineChart.getData().clear());
 
-        Group root = new Group(textField,loadButton,clearButton,mainLineChart,analiZeButton);
+        Group root = new Group(textField,loadButton,clearButton,mainLineChart,analiZeButton,textArea);
         Scene scene = new Scene(root, GlobalVariable.WEIGHT, GlobalVariable.HEIGHT);
 
         Stage stage = new Stage();
         stage.setTitle("Всё для любимого дяди");
         stage.setScene(scene);
         stage.show();
-    }
-
-
-
-    public void set(TimeSeries ts) {
-        this.ts= ts;
-    }
-
-    public TimeSeries getTs() {
-        return ts;
     }
 
 

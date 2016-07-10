@@ -16,7 +16,7 @@ public class TimeSeries {
     List<Row> series;
     final LogicScheme logicScheme;
     public long n =0;
-    public final long k =10;
+    public final long k =5;
     long range = 0;
 
     public TimeSeries(String fileName,final LogicScheme logicScheme) throws FileNotFoundException {
