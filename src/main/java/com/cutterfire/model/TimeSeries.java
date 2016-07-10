@@ -70,6 +70,27 @@ public class TimeSeries {
         return max-min;
     }
 
+    public Double getMean(int numberColumn) {
+
+        Double summ = 0D;
+        Long n=0L;
+
+        for (Row row : series) {
+            switch (logicScheme.getTypeValues(numberColumn)) {
+                case DOUBLE:
+                    summ += (Double) row.getRow()[numberColumn];
+                    break;
+                case DATE:
+                    summ += (Long)row.getRow()[numberColumn];
+                    break;
+            }
+            n++;
+        }
+
+        return summ/(double)n;
+    }
+
+
     public void scaleRow(int numberColumn) {
         Object min = null;
         switch (logicScheme.getTypeValues(numberColumn)) {

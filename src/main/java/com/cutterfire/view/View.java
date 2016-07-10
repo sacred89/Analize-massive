@@ -41,22 +41,23 @@ public class View extends Application {
         mainLineChart.setTitle(textField.getText());
 
         loadButton.setOnAction(event-> {
-            System.out.println("Loading...");
-            LogicScheme logicScheme = new LogicScheme();
-            logicScheme.appendColumn("date", TypeValues.DATE);
-            logicScheme.appendColumn("in",TypeValues.DOUBLE);
-            logicScheme.appendColumn("out",TypeValues.DOUBLE);
-            logicScheme.appendColumn("min",TypeValues.DOUBLE);
-            logicScheme.appendColumn("max",TypeValues.DOUBLE);
-            logicScheme.appendColumn("count",TypeValues.INT);
             try {
-                ts = new TimeSeries(textField.getText(),logicScheme);
-                if (mainLineChart.getData().isEmpty())
+                if (mainLineChart.getData().isEmpty()) {
+                    System.out.println("Loading...");
+                    LogicScheme logicScheme = new LogicScheme();
+                    logicScheme.appendColumn("date", TypeValues.DATE);
+                    logicScheme.appendColumn("in",TypeValues.DOUBLE);
+                    logicScheme.appendColumn("out",TypeValues.DOUBLE);
+                    logicScheme.appendColumn("min",TypeValues.DOUBLE);
+                    logicScheme.appendColumn("max",TypeValues.DOUBLE);
+                    logicScheme.appendColumn("count",TypeValues.INT);
+                    ts = new TimeSeries(textField.getText(),logicScheme);
                     mainLineChart.getData().addAll(ts.getChart());
+                }
                 else {
                     XYChart.Series seriesChart = new XYChart.Series();
-                    seriesChart.getData().add((new XYChart.Data(0L,0.150)));
-                    seriesChart.getData().add((new XYChart.Data(ts.getRange(0),0.150)));
+                    seriesChart.getData().add((new XYChart.Data(0L,ts.getMean(2))));
+                    seriesChart.getData().add((new XYChart.Data(ts.getRange(0),ts.getMean(2))));
                     seriesChart.setName("dasd");
                     mainLineChart.getData().addAll(seriesChart);
                 }
